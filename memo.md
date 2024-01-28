@@ -2,7 +2,7 @@
 
 ## インデックスの内部構造
 ```mermaid
-graph TD;
+flowchart TD;
   a[
     id: 1
     age: 27
