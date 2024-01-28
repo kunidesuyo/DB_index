@@ -3,15 +3,9 @@
 ## インデックスの内部構造
 ```mermaid
 flowchart TD;
-  a[
-    id: 1
-    age: 27
-    height: 170
-  ]
+  a[id: 1 \n age: 27 \n height: 170]
     -->
-  b[
-    a
-  ];
+  b[a];
   a-->c;
   b-->d;
   c-->d;
