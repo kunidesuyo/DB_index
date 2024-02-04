@@ -24,8 +24,8 @@ flowchart TD;
 - DBによるインデックスの内部実装の違い
   - B+Treeインデックス
   - クラスタ化インデックス
-- 大量のデータを作成する方法
-- クエリの実行時間計測方法
+- [x] 大量のデータを作成する方法
+- [ ] クエリの実行時間計測方法
 ## 各項目でまとめること
 - インデックスあり、なしの時の結果
   - 実行時間
@@ -38,8 +38,10 @@ flowchart TD;
   - テーブル削除
 
 ## DBコンテナの扱い
-- データの削除
+- DBデータ永続化削除
   - `docker volume rm db_index_test_index_db_data`
+- DBコンテナに入る
+  - `docker exec -it mysql /bin/bash`
 - SQLファイルの実行
   - Sequal-Aceで実行
   - entrypointディレクトリをバインドして、初期実行するようにする

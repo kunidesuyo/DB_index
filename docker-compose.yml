@@ -17,7 +17,8 @@ services:
     container_name: "mysql"
     volumes:
       - test_index_db_data:/var/lib/mysql
-      - ./queries/init:/docker-entrypoint-initdb.d 
+      - ./queries/init:/docker-entrypoint-initdb.d
+      - ./queries:/queries
 
 
   cli:

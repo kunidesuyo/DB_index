@@ -10,3 +10,8 @@ SELECT gen.n +1,
   FROM generator_4k gen, generator_16 rand
  WHERE gen.n < 1000
  GROUP BY gen.n;
+
+ UPDATE employees 
+   SET first_name='MARKUS', 
+       last_name='WINAND'
+ WHERE employee_id=123;

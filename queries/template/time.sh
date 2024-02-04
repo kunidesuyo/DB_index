@@ -1,0 +1,1 @@
+time(cat /queries/template/select.sql | mysql -uuser -ppassword db > /dev/null)
