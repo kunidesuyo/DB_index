@@ -31,8 +31,15 @@ flowchart TD;
   - 実行時間
   - 実行計画
   - （ありの時の）インデックスツリーの使われ方
+- 欲しいクエリ
+  - テーブル定義
+  - データ生成
+  - 全行削除
+  - テーブル削除
 
 ## DBコンテナの扱い
 - データの削除
-  - ``
+  - `docker volume rm db_index_test_index_db_data`
 - SQLファイルの実行
+  - Sequal-Aceで実行
+  - entrypointディレクトリをバインドして、初期実行するようにする
