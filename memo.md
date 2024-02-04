@@ -35,6 +35,7 @@ flowchart TD;
 - 欲しいクエリ
   - テーブル定義
   - データ生成
+  - インデックス作成
   - 全行削除
   - テーブル削除
 
@@ -46,3 +47,7 @@ flowchart TD;
 - SQLファイルの実行
   - Sequal-Aceで実行
   - entrypointディレクトリをバインドして、初期実行するようにする
+  - `mysql -uuser -ppassword db < .sql`
+
+## 参考URL
+[USE THE INDEX LUKE](https://use-the-index-luke.com/ja)
