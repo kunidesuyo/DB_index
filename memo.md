@@ -32,6 +32,7 @@ flowchart TD;
     - id1を指定した検索は効く
     - id2を指定した検索は効かない
       - フルテーブルスキャンになる
+      - インデックスコンディションプッシュダウンというもので使われることもある[参考14:30~](https://youtu.be/4Zj7Qgvt7RE?si=AIpn9un92sSdm1ta)
 
 #### フルテーブルスキャンよりインデックス検索の方が遅くなるパターン
 - index range scanの範囲が広くなってしまう
@@ -85,7 +86,17 @@ BTreeに存在しない値の探索
 - 部分一致検索ではインデックスを効かせられない
   - LIKE '%hoge%'
   - 全文検索には他の方法を用いる(時間があったら調査)
+    - FULLTEXT INDEX
+      - [参考](https://dev.mysql.com/doc/refman/8.0/en/fulltext-search.html);
 
+#### インデックスの結合
+[参考](https://use-the-index-luke.com/ja/sql/where-clause/searching-for-ranges/index-merge-performance)
+- 別々のカラムを範囲検索
+  - 2つのカラムに対する複合インデックス
+    - 選択性の高いカラムを先に置く
+  - 各々のカラムのインデックスを作成
+    - 各々のインデックスをつかって対象のデータを検索
+    - 各々の検索結果の共通部分を返す
 
 ### 複合インデックス
 ### 大なり小なりBETWEEN
