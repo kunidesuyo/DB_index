@@ -18,6 +18,6 @@ CREATE OR REPLACE VIEW generator_64k
 AS SELECT ( ( hi.n << 8 ) | lo.n ) AS n
      FROM generator_256 lo, generator_256 hi;
 
--- CREATE OR REPLACE VIEW generator_1m
--- AS SELECT ( ( hi.n << 4 ) | lo.n ) AS n
---      FROM generator_16 lo, generator_64k hi;
+CREATE OR REPLACE VIEW generator_1m
+AS SELECT ( ( hi.n << 4 ) | lo.n ) AS n
+     FROM generator_16 lo, generator_64k hi;

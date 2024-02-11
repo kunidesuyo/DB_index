@@ -1,0 +1,1 @@
+DELETE FROM index_col_and_no_index_col;
