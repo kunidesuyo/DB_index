@@ -96,14 +96,28 @@ BTreeに存在しない値の探索
     - 選択性の高いカラムを先に置く
   - 各々のカラムのインデックスを作成
     - 各々のインデックスをつかって対象のデータを検索
-    - 各々の検索結果の共通部分を返す
+    - 各々の検索結果の積集合を返す
+    - using intersect
 
-### 複合インデックス
-### 大なり小なりBETWEEN
-### LIKE
 ## ORDER BY
-### file sort
+- order by句がインデックスによる順序付けと一致している場合、ソート処理を省略できる
+  - index id1, id2: where id1= order by id1, id2
+  - index id1, id2: where id1= id2(range) orderby id2
+- 一致していない場合はソートをしないといけない
+  - クイックソート(nlogn)
+### ASC, DESC
+- 指定するカラムが単一
+  - ASC, DESCどちらでもインデックスが使える
+- 複数
+  - ASC, DESCが一致していれば良い
+  - indexにASC, DESCを指定できる
 ### カバリングインデックス
+- selectする列と使うインデックスの列が一致
+- count
+
+### update, delete, insert
+- 各操作後に存在するインデックスを更新することになる
+- update, deleteのターゲットの絞り込みで使える
 
 ## 調べること
 - DBによるインデックスの内部実装の違い
@@ -136,3 +150,4 @@ BTreeに存在しない値の探索
 
 ## 参考URL
 [USE THE INDEX LUKE](https://use-the-index-luke.com/ja)
+[参考14:30~](https://youtu.be/4Zj7Qgvt7RE?si=AIpn9un92sSdm1ta)
