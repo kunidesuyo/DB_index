@@ -89,7 +89,7 @@ BTreeに存在しない値の探索
     - FULLTEXT INDEX
       - [参考](https://dev.mysql.com/doc/refman/8.0/en/fulltext-search.html);
 
-#### インデックスの結合(*)
+#### インデックスの結合(*)?
 [参考](https://use-the-index-luke.com/ja/sql/where-clause/searching-for-ranges/index-merge-performance)
 - 別々のカラムを範囲検索
   - 2つのカラムに対する複合インデックス
@@ -105,7 +105,7 @@ BTreeに存在しない値の探索
   - index id1, id2: where id1= id2(range) orderby id2
 - 一致していない場合はソートをしないといけない
   - クイックソート(nlogn)
-### ASC, DESC(*)
+### ASC, DESC(*)?
 - 指定するカラムが単一
   - ASC, DESCどちらでもインデックスが使える
 - 複数
