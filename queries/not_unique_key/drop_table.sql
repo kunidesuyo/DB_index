@@ -1,0 +1,1 @@
+DROP TABLE not_unique_key_table;
