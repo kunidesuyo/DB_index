@@ -111,11 +111,12 @@ BTreeに存在しない値の探索
 - 複数
   - ASC, DESCが一致していれば良い
   - indexにASC, DESCを指定できる
-### カバリングインデックス
+
+## カバリングインデックス
 - selectする列と使うインデックスの列が一致
 - count
 
-### update, delete, insert
+## update, delete, insert
 - 各操作後に存在するインデックスを更新することになる
 - update, deleteのターゲットの絞り込みで使える
 
