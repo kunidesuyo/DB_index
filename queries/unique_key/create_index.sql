@@ -1,0 +1,1 @@
+CREATE INDEX unique_key_index on unique_key_table(id);

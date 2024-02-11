@@ -1,0 +1,1 @@
+EXPLAIN SELECT * FROM unique_key_table WHERE id = 10000;

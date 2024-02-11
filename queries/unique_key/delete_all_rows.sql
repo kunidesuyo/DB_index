@@ -1,0 +1,1 @@
+DELETE FROM unique_key_table;
