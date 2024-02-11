@@ -1,0 +1,1 @@
+DROP TABLE multi_column_index;

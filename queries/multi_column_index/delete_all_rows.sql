@@ -1,0 +1,1 @@
+DELETE FROM multi_column_index;
