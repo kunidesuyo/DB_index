@@ -1,0 +1,1 @@
+DROP TABLE primary_key_table;

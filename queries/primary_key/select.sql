@@ -1,0 +1,1 @@
+EXPLAIN SELECT * FROM primary_key_table WHERE id = 10000;
