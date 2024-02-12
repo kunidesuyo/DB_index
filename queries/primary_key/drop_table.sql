@@ -1,1 +1,1 @@
-DROP TABLE primary_key_table;
+DROP TABLE PRIMARY_KEY_TABLE;
