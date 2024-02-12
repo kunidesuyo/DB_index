@@ -51,10 +51,6 @@ mysql8.0.13以降は使える[参考](https://dev.mysql.com/doc/refman/8.0/en/cr
 - 関数インデックスは確定的でないといけない(同じ条件でも実行する環境によって値が変わるものには使えない)
   - ex. 現在時刻を関数値の計算に使う場合など
 
-### インデックスの作りすぎ(*)
-- インデックスはselectを早くしてくれるが、insert, update, deleteは遅くなる
-  - insert, update, deleteするたびにインデックスツリーを更新するため
-
 ### 範囲検索
 [参考](https://use-the-index-luke.com/ja/sql/where-clause/searching-for-ranges)
 #### 大なり小なりBETWEEN(のみ)(範囲検索)
@@ -99,7 +95,7 @@ BTreeに存在しない値の探索
     - 各々の検索結果の積集合を返す
     - using intersect
 
-## ORDER BY(*)
+## ORDER BY(/queries/order_by)
 - order by句がインデックスによる順序付けと一致している場合、ソート処理を省略できる
   - index id1, id2: where id1= order by id1, id2
   - index id1, id2: where id1= id2(range) orderby id2
@@ -112,12 +108,12 @@ BTreeに存在しない値の探索
   - ASC, DESCが一致していれば良い
   - indexにASC, DESCを指定できる
 
-## カバリングインデックス(*)
+## カバリングインデックス(*)?
 - selectする列と使うインデックスの列が一致
 - count
 
 ## update, delete, insert(*)
-- 各操作後に存在するインデックスを更新することになる
+- 各操作後に存在するインデックスを更新することになるので、インデックスが多いほど処理が遅くなる
 - update, deleteのターゲットの絞り込みで使える
 
 ## 調べること
