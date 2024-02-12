@@ -1,1 +1,0 @@
-DELETE FROM not_unique_key_table;

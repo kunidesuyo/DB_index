@@ -1,1 +1,0 @@
-CREATE INDEX not_unique_key_index on not_unique_key_table(id);

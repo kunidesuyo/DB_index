@@ -1,1 +1,0 @@
-EXPLAIN SELECT * FROM not_unique_key_table WHERE id = 10000;
