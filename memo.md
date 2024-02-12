@@ -65,10 +65,13 @@ graph LR;
 ## WHERE句
 ### 等価演算子
 #### 単一
-- プライマリーキーでの検索(/queries/primary_key)
-  - インデックスツリーの走査のみ
-  - 一意に決まることが保証されているのでリーフノードの走査は行われない
-  - 実行計画では{type: const}となる。
+##### プライマリーキーでの検索(/queries/primary_key)
+- インデックスツリーの走査のみ
+- 一意に決まることが保証されているのでリーフノードの走査は行われない
+- 実行計画では{type: const}となる。
+###### 例
+
+- DB
 
 |ID|
 |----|
@@ -76,7 +79,13 @@ graph LR;
 |2|
 |3|
 |4|
+
+- query
+
 `(SELECT) WHERE ID = 2`
+
+- index tree
+
 ```mermaid
 graph TB;
   subgraph cluster index
@@ -88,14 +97,19 @@ graph TB;
     style e fill:red
   end
 ```
+
+- 実行計画
+
 |type|key|
 |----|----|
 |const|PRIMARY|
 
-- プライマリーキー以外の検索
-  - 一意(/queries/unique_key)
-    - UNIQUE制約設定されたカラムには自動的にインデックスが作成される
-    - 実行計画: {type: const}  
+##### プライマリーキー以外の検索
+- 一意(/queries/unique_key)
+  - UNIQUE制約設定されたカラムには自動的にインデックスが作成される
+  - 実行計画: {type: const}
+###### 例
+- DB
 
 |ID|NUM|
 |----|----|
@@ -104,9 +118,16 @@ graph TB;
 |3|3|
 |4|4|
 
+- INDEX定義
+
 `INDEX NUM`
 
+- query
+
 `(SELECT) WHERE NUM = 2`
+
+- INDEX TREE
+
 ```mermaid
 graph TB;
   subgraph secondary index NUM
@@ -120,15 +141,18 @@ graph TB;
     style h fill:red
   end
 ```
+
 - 実行計画
 
 |type|key|
 |----|----|
 |const|NUM|
 
-  - 一意ではない(queries/not_unique_key)
-    - インデックスツリーの走査とリーフノードの走査が行われる
-    - 実行計画では{type: ref}
+##### 一意ではない(queries/not_unique_key)
+  - インデックスツリーの走査とリーフノードの走査が行われる
+  - 実行計画では{type: ref}
+###### 例
+- DB
 
 |ID|NUM|
 |----|----|
@@ -137,9 +161,16 @@ graph TB;
 |3|2|
 |4|3|
 
+- INDEX
+
+`INDEX NUM`
+
+- クエリ
+
 `(SELECT) WHERE NUM = 2`
 
-- ツリーの走査後
+- INDEX TREE
+  - ツリーの走査
 ```mermaid
 graph TB;
   subgraph secondary index NUM
@@ -161,7 +192,7 @@ graph TB;
   end
   style e fill:red
 ```
-- リーフノードの走査
+  - リーフノードの走査
 ```mermaid
 graph TB;
   subgraph leaf node
@@ -179,16 +210,205 @@ graph TB;
 ```
 
 
-#### 複合
-- 順番(queries/multi_column_index)
-  - id1, id2, id3で作成した場合
-    - id1, id1&id2, id1&id2&id3を指定した検索は効く
-      - 実行計画: {type: ref}
-    - それ以外を指定した検索は効かない
-      - ~~フルテーブルスキャンになる~~
-      - フルインデックススキャンになる
-      - 実行計画: {type: index}
-      - インデックスコンディションプッシュダウンというもので使われることもある[参考14:30~](https://youtu.be/4Zj7Qgvt7RE?si=AIpn9un92sSdm1ta)
+#### 複合インデックス(queries/multi_column_index)
+- id1, id2, id3で作成した場合
+  - id1, id1&id2, id1&id2&id3を指定した検索は効く
+    - 実行計画: {type: ref}
+  - それ以外を指定した検索は効かない
+    - ~~フルテーブルスキャンになる~~
+    - フルインデックススキャンになる
+    - 実行計画: {type: index}
+    - インデックスコンディションプッシュダウンというもので使われることもある[参考14:30~](https://youtu.be/4Zj7Qgvt7RE?si=AIpn9un92sSdm1ta)
+##### 例
+- DB
+
+|ID|NUM1|NUM2|NUM3|
+|----|----|----|----|
+|1|1|1|1|
+|2|1|2|1|
+|3|1|2|2|
+|4|2|1|1|
+|5|3|2|1|
+
+- INDEX
+
+`INDEX NUM1, NUM2, NUM3`
+
+- クエリ
+
+`(SELECT) WHERE NUM1 = 1`
+
+- INDEX TREE
+  - ツリーの走査
+```mermaid
+graph TB;
+  subgraph secondary index NUM
+  direction TB;
+  a[ ];
+  b[ ];
+  c[ ];
+  z[ ];
+  a-->b;
+  a-->c;
+  a-->z;
+  z-->h;
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    h[1<br>1<br>1];
+    d[1<br>2<br>1];
+    e[1<br>2<br>2];
+    f[2<br>1<br>1];
+    g[3<br>2<br>1];
+  end
+  end
+  style h fill:red
+```
+  - リーフノードの走査
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[1<br>1<br>1];
+    b[1<br>2<br>1];
+    c[1<br>2<br>2];
+    d[2<br>1<br>1];
+    e[3<br>2<br>1];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+    d<-->e;
+    style a fill:red
+    style b fill:red
+    style c fill:red
+  end
+```
+
+- クエリ
+
+`(SELECT) WHERE NUM1 = 1 AND NUM2 = 2`
+
+- INDEX TREE
+  - ツリーの走査
+```mermaid
+graph TB;
+  subgraph secondary index NUM
+  direction TB;
+  a[ ];
+  b[ ];
+  c[ ];
+  z[ ];
+  a-->b;
+  a-->c;
+  a-->z;
+  z-->h;
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    h[1<br>1<br>1];
+    d[1<br>2<br>1];
+    e[1<br>2<br>2];
+    f[2<br>1<br>1];
+    g[3<br>2<br>1];
+  end
+  end
+  style d fill:red
+```
+  - リーフノードの走査
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[1<br>1<br>1];
+    b[1<br>2<br>1];
+    c[1<br>2<br>2];
+    d[2<br>1<br>1];
+    e[3<br>2<br>1];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+    d<-->e;
+    style b fill:red
+    style c fill:red
+  end
+```
+
+- クエリ
+
+`(SELECT) WHERE NUM1 = 1 AND NUM2 = 2 AND NUM3 = 1`
+
+- INDEX TREE
+  - ツリーの走査
+```mermaid
+graph TB;
+  subgraph secondary index NUM
+  direction TB;
+  a[ ];
+  b[ ];
+  c[ ];
+  z[ ];
+  a-->b;
+  a-->c;
+  a-->z;
+  z-->h;
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    h[1<br>1<br>1];
+    d[1<br>2<br>1];
+    e[1<br>2<br>2];
+    f[2<br>1<br>1];
+    g[3<br>2<br>1];
+  end
+  end
+  style d fill:red
+```
+  - リーフノードの走査
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[1<br>1<br>1];
+    b[1<br>2<br>1];
+    c[1<br>2<br>2];
+    d[2<br>1<br>1];
+    e[3<br>2<br>1];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+    d<-->e;
+    style b fill:red
+  end
+```
+
+- クエリ
+
+`(SELECT) WHERE NUM2 = 2`
+
+`(SELECT) WHERE NUM3 = 1`
+
+- リーフノード
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[1<br>1<br>1];
+    b[1<br>2<br>1];
+    c[1<br>2<br>2];
+    d[2<br>1<br>1];
+    e[3<br>2<br>1];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+    d<-->e;
+  end
+```
+- 説明
+  - NUM2が同じリーフノードが固まって配置されていないので、このインデックスを使って絞り込みは行えない
+  - NUM3も同様
 
 #### インデックスにあるカラムとないカラムを条件に指定(/queries/index_no_index)
 - インデックスを使って検索
