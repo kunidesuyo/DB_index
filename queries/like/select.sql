@@ -1,3 +1,0 @@
-EXPLAIN SELECT * FROM like_table WHERE str LIKE 'ABC%';
-EXPLAIN SELECT * FROM like_table WHERE str LIKE '%ABC';
-EXPLAIN SELECT * FROM like_table WHERE str LIKE '%ABC%';

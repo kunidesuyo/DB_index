@@ -1,1 +1,2 @@
-DROP TABLE like_table;
+DROP TABLE LIKE_TABLE;
+DROP TABLE generator_char;
