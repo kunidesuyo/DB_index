@@ -1,1 +1,0 @@
-CREATE INDEX multi_column_index on multi_column_index(id1, id2, id3);

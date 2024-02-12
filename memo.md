@@ -77,7 +77,7 @@ graph LR;
     - 実行計画では{type: ref}
 
 #### 複合
-- 順番(queries/mulit_column_index)
+- 順番(queries/multi_column_index)
   - id1, id2, id3で作成した場合
     - id1, id1&id2, id1&id2&id3を指定した検索は効く
       - 実行計画: {type: ref}

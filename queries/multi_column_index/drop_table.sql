@@ -1,1 +1,1 @@
-DROP TABLE multi_column_index;
+DROP TABLE MULTI_COLUMN_INDEX_TABLE;
