@@ -1,1 +1,1 @@
-DROP TABLE unique_key_table;
+DROP TABLE UNIQUE_KEY_TABLE;
