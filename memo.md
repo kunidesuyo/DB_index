@@ -407,7 +407,7 @@ graph TB;
   end
 ```
 - 説明
-  - NUM2が同じリーフノードが固まって配置されていないので、このインデックスを使って絞り込みは行えない
+  - NUM2が同じリーフノードが固まって配置されるとは限らないので、このインデックスを使って絞り込みは行えない
   - NUM3も同様
 
 #### インデックスにあるカラムとないカラムを条件に指定(/queries/index_no_index)
@@ -669,6 +669,89 @@ graph TB;
   - 全文検索には他の方法を用いる(時間があったら調査)
     - FULLTEXT INDEX
       - [参考](https://dev.mysql.com/doc/refman/8.0/en/fulltext-search.html);
+
+##### 例
+- DB
+
+|ID|STR|
+|----|----|
+|1|AA|
+|2|AB|
+|3|BB|
+|4|CA|
+
+- INDEX
+
+`INDEX STR`
+
+- クエリ
+
+`(SELECT) WHERE STR LIKE 'A%'`
+
+- INDEX TREE
+  - ツリーの走査
+```mermaid
+graph TB;
+  subgraph secondary index NUM
+  direction TB;
+  a[ ];
+  b[ ];
+  c[ ];
+  a-->b;
+  a-->c;
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    d[AA];
+    e[AB];
+    f[BB];
+    g[CA];
+  end
+  end
+  style d fill:red
+```
+  - リーフノードの走査
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[AA];
+    b[AB];
+    c[BB];
+    d[CA];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+    style a fill:red
+    style b fill:red
+  end
+```
+
+- クエリ
+
+`(SELECT) WHERE STR LIKE '%A'`
+
+`(SELECT) WHERE STR LIKE '%A%'`
+
+  - リーフノードの走査
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[AA];
+    b[AB];
+    c[BB];
+    d[CA];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+  end
+```
+
+- 条件に当てはまるリーフノードが固まって配置されるとは限らないので、インデックスは使えない
+
+
 
 #### インデックスの結合(x)
 [参考](https://use-the-index-luke.com/ja/sql/where-clause/searching-for-ranges/index-merge-performance)
