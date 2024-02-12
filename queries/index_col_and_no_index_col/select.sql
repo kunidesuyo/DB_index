@@ -1,1 +1,0 @@
-EXPLAIN SELECT * FROM index_col_and_no_index_col WHERE id = 1 AND num = 1;
