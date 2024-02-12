@@ -1,15 +1,56 @@
 # DB index
 
 ## インデックスの内部構造
+### BTree
+- Balanced Tree
+  - 構造
+    - ルートノード、ブランチノード、リーフノード
 ```mermaid
-flowchart TD;
-  a[id: 1 \n age: 27 \n height: 170]
-    -->
-  b[a];
+graph TB;
+  subgraph root node
+    a;
+  end
+  a-->b;
   a-->c;
-  b-->d;
-  c-->d;
+  subgraph branch node
+    direction LR;
+    b;
+    c;
+  end
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    d;
+    e;
+    f;
+    g;
+  end
 ```
+  - 木構造の計算量は木の深さ(ルートノードからリーフノードまでの距離)に依存する
+  - 各リーフノードに対する木の深さを同じに保ってくれる構造
+- 計算量
+  - 検索`log(n)`
+    - ツリーの走査という
+    - (図)
+  - 挿入`log(n)`
+  - 更新`log(n)`
+  - 削除`log(n)`
+  - `n`と`log(n)`の比較
+    - (図)
+### B+Tree
+- BTreeのリーフノードを双方向連結リストにしたもの
+  - (図)
+- リーフノードを辿るのをリーフノードの走査という
+### クラスタインデックスとセカンダリインデックス
+#### クラスタインデックス
+- 主キーに作られるインデックス
+- 自動的に作成される
+
+#### セカンダリインデックス
+- ユーザーが定義するインデックス
+- リーフノードに設定したカラムの値とPKの値が入っている
+- 実データにアクセスするときはPKの値を使ってクラスタインデックスを探索する
 
 ## WHERE句
 ### 等価演算子
@@ -85,7 +126,7 @@ BTreeに存在しない値の探索
     - FULLTEXT INDEX
       - [参考](https://dev.mysql.com/doc/refman/8.0/en/fulltext-search.html);
 
-#### インデックスの結合(*)?
+#### インデックスの結合(x)
 [参考](https://use-the-index-luke.com/ja/sql/where-clause/searching-for-ranges/index-merge-performance)
 - 別々のカラムを範囲検索
   - 2つのカラムに対する複合インデックス
@@ -108,7 +149,7 @@ BTreeに存在しない値の探索
   - ASC, DESCが一致していれば良い
   - indexにASC, DESCを指定できる
 
-## カバリングインデックス(*)?
+## カバリングインデックス(*)
 - selectする列と使うインデックスの列が一致
 - count
 
