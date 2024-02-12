@@ -769,6 +769,137 @@ graph TB;
   - index id1, id2: where id1= id2(range) orderby id2
 - 一致していない場合はソートをしないといけない
   - クイックソート(nlogn)
+
+##### 例
+- DB
+
+|ID|NUM1|NUM2|
+|----|----|----|
+|1|1|1|
+|2|2|2|
+|3|2|1|
+|4|2|3|
+
+- INDEX
+
+`INDEX NUM1`
+
+- クエリ
+
+`(SELECT) WHERE NUM1 = 2 ORDER BY NUM1, NUM2`
+
+- INDEX TREE
+  - ツリーの走査
+```mermaid
+graph TB;
+  subgraph secondary index NUM
+  direction TB;
+  a[ ];
+  b[ ];
+  c[ ];
+  a-->b;
+  a-->c;
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    d[1];
+    e[2];
+    f[2];
+    g[2];
+  end
+  end
+  style e fill:red
+```
+  - リーフノードの走査
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[1];
+    b[2<br>PK: 1];
+    c[2<br>PK: 2];
+    d[2<br>PK: 3];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+    style b fill:red
+    style c fill:red
+    style d fill:red
+  end
+```
+- PKを用いて、クラスタインデックスから行データを取得
+
+|ID|NUM1|NUM2|
+|----|----|----|
+|2|2|2|
+|3|2|1|
+|4|2|3|
+
+- ソート
+
+|ID|NUM1|NUM2|
+|----|----|----|
+|3|2|1|
+|2|2|2|
+|4|2|3|
+
+- 実行計画
+WIP
+
+- INDEX
+
+`INDEX NUM1, NUM2`
+
+- クエリ
+
+`(SELECT) WHERE NUM1 = 2 ORDER BY NUM1, NUM2`
+
+- INDEX TREE
+  - ツリーの走査
+```mermaid
+graph TB;
+  subgraph secondary index NUM
+  direction TB;
+  a[ ];
+  b[ ];
+  c[ ];
+  a-->b;
+  a-->c;
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    d[NUM1: 1<br>NUM2: 1];
+    e[NUM1: 2<br>NUM2: 1];
+    f[NUM1: 2<br>NUM2: 2];
+    g[NUM1: 2<br>NUM2: 3];
+  end
+  end
+  style e fill:red
+```
+  - リーフノードの走査`NUM1 = 2`
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[NUM1: 1<br>NUM2: 1];
+    b[NUM1: 2<br>NUM2: 1];
+    c[NUM1: 2<br>NUM2: 2];
+    d[NUM1: 2<br>NUM2: 3];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+    style b fill:red
+    style c fill:red
+    style d fill:red
+  end
+```
+順番に並んでいるのでそのまま値を返す
+
+- 実行計画
+
+
 ### ASC, DESC(*)?
 - 指定するカラムが単一
   - ASC, DESCどちらでもインデックスが使える
