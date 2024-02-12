@@ -58,6 +58,7 @@ graph LR;
 #### セカンダリインデックス
 - ユーザーが定義するインデックス
 - リーフノードが定義に指定したカラムの値に対して順番に並ぶ
+  - 例示(図)
 - リーフノードには設定したカラムの値とPKの値が入っている
 - 実データにアクセスするときはPKの値を使ってクラスタインデックスを探索する
 
@@ -68,13 +69,115 @@ graph LR;
   - インデックスツリーの走査のみ
   - 一意に決まることが保証されているのでリーフノードの走査は行われない
   - 実行計画では{type: const}となる。
+
+|ID|
+|----|
+|1|
+|2|
+|3|
+|4|
+`(SELECT) WHERE ID = 2`
+```mermaid
+graph TB;
+  subgraph cluster index
+    direction TB;
+    a[ ]-->b[ ];
+    a-->c[ ];
+    b-->d[1] & e[2];
+    c-->f[3] & g[4];
+    style e fill:red
+  end
+```
+|type|key|
+|----|----|
+|const|PRIMARY|
+
 - プライマリーキー以外の検索
   - 一意(/queries/unique_key)
     - UNIQUE制約設定されたカラムには自動的にインデックスが作成される
-    - 実行計画: {type: const}
+    - 実行計画: {type: const}  
+
+|ID|NUM|
+|----|----|
+|1|1|
+|2|2|
+|3|3|
+|4|4|
+
+`INDEX NUM`
+
+`(SELECT) WHERE NUM = 2`
+```mermaid
+graph TB;
+  subgraph secondary index NUM
+    direction TB;
+    a[ ]-->b[ ];
+    a-->c[ ];
+    b-->d[1] & e[NUM=2<br>ID=2];
+    c-->f[3] & g[4];
+    e-->h[cluster index tree]
+    style e fill:red
+    style h fill:red
+  end
+```
+- 実行計画
+
+|type|key|
+|----|----|
+|const|NUM|
+
   - 一意ではない(queries/not_unique_key)
     - インデックスツリーの走査とリーフノードの走査が行われる
     - 実行計画では{type: ref}
+
+|ID|NUM|
+|----|----|
+|1|1|
+|2|2|
+|3|2|
+|4|3|
+
+`(SELECT) WHERE NUM = 2`
+
+- ツリーの走査後
+```mermaid
+graph TB;
+  subgraph secondary index NUM
+  direction TB;
+  a[ ];
+  b[ ];
+  c[ ];
+  a-->b;
+  a-->c;
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    d[1];
+    e[2];
+    f[2];
+    g[3];
+  end
+  end
+  style e fill:red
+```
+- リーフノードの走査
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[1];
+    b[2];
+    c[2];
+    d[3];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+    style b fill:red
+    style c fill:red
+  end
+```
+
 
 #### 複合
 - 順番(queries/multi_column_index)
