@@ -415,6 +415,72 @@ graph TB;
 - そのデータを取り出してインデックスにないカラムの条件でフィルターする
 - mysqlで`2^20`のデータにフィルターをかける処理を書いたがフルテーブルスキャンを使わなかった(?)
 
+##### 例
+- DB
+
+|ID|NUM1|NUM2|
+|----|----|----|
+|1|1|1|
+|2|1|2|
+|3|2|1|
+|4|2|2|
+
+- INDEX
+
+`INDEX NUM1`
+
+- クエリ
+
+`(SELECT) WHERE NUM1 = 1 AND NUM2 = 2`
+
+- INDEX TREE
+  - ツリーの走査
+```mermaid
+graph TB;
+  subgraph secondary index NUM1
+  direction TB;
+  a[ ];
+  b[ ];
+  c[ ];
+  a-->b;
+  a-->c;
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    d[1];
+    e[1];
+    f[2];
+    g[2];
+  end
+  end
+  style e fill:red
+```
+  - リーフノードの走査
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[1<br>PK: 1];
+    b[1<br>PK: 2];
+    c[2];
+    d[2];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+    style a fill:red
+    style b fill:red
+  end
+```
+- クラスタインデックスから行データを取り出して、条件でフィルタ
+```mermaid
+graph TB;
+  a[PK: 1<br>NUM: 1<br>NUM2: 1]
+  b[PK: 2<br>NUM: 1<br>NUM2: 2]
+  style b fill:red
+
+```
+
 ### 関数インデックス(今回はスキップ)
 mysql8.0.13以降は使える[参考](https://dev.mysql.com/doc/refman/8.0/en/create-index.html)
 - WHERE句で関数値を指定するとき(ex. where f(num) = 1)にインデックスを効かせることができる
@@ -483,8 +549,8 @@ mysql8.0.13以降は使える[参考](https://dev.mysql.com/doc/refman/8.0/en/cr
 - count
 
 ## update, delete, insert(*)
-- 各操作後に存在するインデックスを更新することになるので、インデックスが多いほど処理が遅くなる
-- update, deleteのターゲットの絞り込みで使える
+- update, deleteのターゲットの絞り込みで使える(影響小)
+- 各操作後に存在するインデックスを更新することになるので、インデックスが多いほど処理が遅くなる(影響大)
 
 ## 調べること
 - DBによるインデックスの内部実装の違い
