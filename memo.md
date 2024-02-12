@@ -1,5 +1,6 @@
 # DB index
-
+- SQL:mysql8.0.27
+- Engine: innoDB
 ## インデックスの内部構造
 ### BTree
 - Balanced Tree
@@ -8,23 +9,23 @@
 ```mermaid
 graph TB;
   subgraph root node
-    a;
+    a[ ];
   end
   a-->b;
   a-->c;
   subgraph branch node
     direction LR;
-    b;
-    c;
+    b[ ];
+    c[ ];
   end
   b-->d & e;
   c-->f & g;
   subgraph leaf node
     direction LR;
-    d;
-    e;
-    f;
-    g;
+    d[1];
+    e[2];
+    f[3];
+    g[4];
   end
 ```
   - 木構造の計算量は木の深さ(ルートノードからリーフノードまでの距離)に依存する
@@ -100,14 +101,13 @@ graph TB;
 
 - 実行計画
 
-|type|key|
-|----|----|
-|const|PRIMARY|
+|type|key|filtered|Extra
+|----|----|----|----|
+|const|PRIMARY|100.00|Using index|
 
 ##### プライマリーキー以外の検索
 - 一意(/queries/unique_key)
-  - UNIQUE制約設定されたカラムには自動的にインデックスが作成される
-  - 実行計画: {type: const}
+  - UNIQUE制約設定されたカラムには自動的にインデックスが作成される(インデックスの名前はカラム名)
 ###### 例
 - DB
 
@@ -144,9 +144,9 @@ graph TB;
 
 - 実行計画
 
-|type|key|
-|----|----|
-|const|NUM|
+|type|key|filtered|Extra
+|----|----|----|----|
+|const|NUM|100.00|Using index|
 
 ##### 一意ではない(queries/not_unique_key)
   - インデックスツリーの走査とリーフノードの走査が行われる
@@ -208,6 +208,15 @@ graph TB;
     style c fill:red
   end
 ```
+
+- 実行計画
+
+|type|key|filtered|Extra
+|----|----|----|----|
+|ref|(index_name)|100.00|Using index|
+
+- type: ref
+  - constではないインデックスを使っての等価検索(要調査)
 
 
 #### 複合インデックス(queries/multi_column_index)
@@ -285,6 +294,12 @@ graph TB;
   end
 ```
 
+- 実行計画
+
+|type|key|filtered|Extra
+|----|----|----|----|
+|ref|(index_name)|100.00|Using index|
+
 - クエリ
 
 `(SELECT) WHERE NUM1 = 1 AND NUM2 = 2`
@@ -335,6 +350,12 @@ graph TB;
   end
 ```
 
+- 実行計画
+
+|type|key|filtered|Extra
+|----|----|----|----|
+|ref|(index_name)|100.00|Using index|
+
 - クエリ
 
 `(SELECT) WHERE NUM1 = 1 AND NUM2 = 2 AND NUM3 = 1`
@@ -384,6 +405,12 @@ graph TB;
   end
 ```
 
+- 実行計画
+
+|type|key|filtered|Extra
+|----|----|----|----|
+|ref|(index_name)|100.00|Using index|
+
 - クエリ
 
 `(SELECT) WHERE NUM2 = 2`
@@ -406,6 +433,16 @@ graph TB;
     d<-->e;
   end
 ```
+
+- 実行計画
+
+|type|key|filtered|Extra
+|----|----|----|----|
+|index|(index_name)|10.00|Using where, Using index|
+
+- type: index(調べる)
+- Extra: Using where(調べる)
+
 - 説明
   - NUM2が同じリーフノードが固まって配置されるとは限らないので、このインデックスを使って絞り込みは行えない
   - NUM3も同様
@@ -478,8 +515,15 @@ graph TB;
   a[PK: 1<br>NUM: 1<br>NUM2: 1]
   b[PK: 2<br>NUM: 1<br>NUM2: 2]
   style b fill:red
-
 ```
+- 実行計画
+
+|type|key|filtered|Extra
+|----|----|----|----|
+|ref|(index_name)|50.00|Using where|
+
+- filtered(求める)
+- Using where(調べる)
 
 ### 関数インデックス(今回はスキップ)
 mysql8.0.13以降は使える[参考](https://dev.mysql.com/doc/refman/8.0/en/create-index.html)
@@ -643,6 +687,14 @@ graph TB;
   end
 ```
 
+- 実行計画(>=, <=, BETWEEN全て一緒)
+
+|type|key|filtered|Extra
+|----|----|----|----|
+|range|(index_name)|100.00|Using index condition|
+
+- Extra: Using index condition(調べる)
+
 
 #### 範囲条件と等価条件の複合(*)?
 - 等価条件に使われるカラムをより最初にしてインデックスを作るとよい
@@ -728,6 +780,14 @@ graph TB;
   end
 ```
 
+- 実行計画
+
+|type|key|filtered|Extra
+|----|----|----|----|
+|range|(index_name)|100.00|Using where, Using index|
+
+- Extraについて
+
 - クエリ
 
 `(SELECT) WHERE STR LIKE '%A'`
@@ -748,6 +808,12 @@ graph TB;
     c<-->d;
   end
 ```
+
+- 実行計画
+
+|type|key|filtered|Extra
+|----|----|----|----|
+|index|(index_name)|11.11|Using where, Using index|
 
 - 条件に当てはまるリーフノードが固まって配置されるとは限らないので、インデックスは使えない
 
@@ -845,7 +911,11 @@ graph TB;
 |4|2|3|
 
 - 実行計画
-WIP
+
+|type|key|filtered|Extra
+|----|----|----|----|
+|ref|(index_name)|100.00|Using filesort|
+
 
 - INDEX
 
@@ -898,6 +968,10 @@ graph TB;
 順番に並んでいるのでそのまま値を返す
 
 - 実行計画
+
+|type|key|filtered|Extra
+|----|----|----|----|
+|ref|(index_name)|100.00|Using index|
 
 
 ### ASC, DESC(*)?
