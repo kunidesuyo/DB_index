@@ -45,9 +45,9 @@ graph TB;
 graph LR;
   subgraph leaf node
     direction LR;
-    d<-->e;
-    e<-->f;
-    f<-->g;
+    a[1]<-->b[2];
+    b<-->c[3];
+    c<-->d[4];
   end
 ```
 - リーフノードを辿るのをリーフノードの走査という
