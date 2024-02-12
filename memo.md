@@ -472,7 +472,7 @@ graph TB;
     style b fill:red
   end
 ```
-- クラスタインデックスから行データを取り出して、条件でフィルタ
+- PKを使って、クラスタインデックスから行データを取り出して、条件でフィルタ
 ```mermaid
 graph TB;
   a[PK: 1<br>NUM: 1<br>NUM2: 1]
@@ -494,6 +494,155 @@ mysql8.0.13以降は使える[参考](https://dev.mysql.com/doc/refman/8.0/en/cr
 #### 大なり小なりBETWEEN(のみ)(範囲検索)(queries/range)
 - リーフノードの走査が行われる
 - {type: range}
+
+##### 例
+- DB
+
+|ID|NUM|
+|----|----|
+|1|1|
+|2|2|
+|3|3|
+|4|4|
+
+- INDEX
+
+`INDEX NUM`
+
+- クエリ
+
+`(SELECT) WHERE NUM >= 2`
+
+- INDEX TREE
+  - ツリーの走査
+```mermaid
+graph TB;
+  subgraph secondary index NUM
+  direction TB;
+  a[ ];
+  b[ ];
+  c[ ];
+  a-->b;
+  a-->c;
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    d[1];
+    e[2];
+    f[3];
+    g[4];
+  end
+  end
+  style e fill:red
+```
+  - リーフノードの走査
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[1];
+    b[2];
+    c[3];
+    d[4];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+    style b fill:red
+    style c fill:red
+    style d fill:red
+  end
+```
+
+- クエリ
+
+`(SELECT) WHERE NUM <= 3`
+
+- INDEX TREE
+  - ツリーの走査
+```mermaid
+graph TB;
+  subgraph secondary index NUM
+  direction TB;
+  a[ ];
+  b[ ];
+  c[ ];
+  a-->b;
+  a-->c;
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    d[1];
+    e[2];
+    f[3];
+    g[4];
+  end
+  end
+  style f fill:red
+```
+  - リーフノードの走査
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[1];
+    b[2];
+    c[3];
+    d[4];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+    style a fill:red
+    style b fill:red
+    style c fill:red
+  end
+```
+
+- クエリ
+
+`(SELECT) WHERE NUM BETWEEN 2 AND 3`
+
+- INDEX TREE
+  - ツリーの走査
+```mermaid
+graph TB;
+  subgraph secondary index NUM
+  direction TB;
+  a[ ];
+  b[ ];
+  c[ ];
+  a-->b;
+  a-->c;
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    d[1];
+    e[2];
+    f[3];
+    g[4];
+  end
+  end
+  style e fill:red
+```
+  - リーフノードの走査
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[1];
+    b[2];
+    c[3];
+    d[4];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+    style b fill:red
+    style c fill:red
+  end
+```
+
 
 #### 範囲条件と等価条件の複合(*)?
 - 等価条件に使われるカラムをより最初にしてインデックスを作るとよい
