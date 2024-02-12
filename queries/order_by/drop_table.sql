@@ -1,1 +1,1 @@
-DROP TABLE order_by_table;
+DROP TABLE ORDER_BY_TABLE;

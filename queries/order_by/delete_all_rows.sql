@@ -1,1 +1,0 @@
-DELETE FROM order_by_table;
