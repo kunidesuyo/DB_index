@@ -105,6 +105,9 @@ graph TB;
 |----|----|----|----|
 |const|PRIMARY|100.00|Using index|
 
+- type: const
+  - 一行のみを見つけるためにBツリーを走査するときに表示される
+
 ##### プライマリーキー以外の検索
 - 一意(/queries/unique_key)
   - UNIQUE制約設定されたカラムには自動的にインデックスが作成される(インデックスの名前はカラム名)
@@ -216,7 +219,7 @@ graph TB;
 |ref|(index_name)|100.00|Using index|
 
 - type: ref
-  - constではないインデックスを使っての等価検索(要調査)
+  - リーフノードの走査している場合に表示される
 
 
 #### 複合インデックス(queries/multi_column_index)
@@ -440,8 +443,12 @@ graph TB;
 |----|----|----|----|
 |index|(index_name)|10.00|Using where, Using index|
 
-- type: index(調べる)
-- Extra: Using where(調べる)
+- type: index
+  - インデックスの全行をインデックスの順番に沿って読む
+  - あまり効率が良くない
+- Extra: Using where
+  - indexに含まれない列に対してWHEREに指定した条件を評価する
+  - 行データを取り出した後のフィルター
 
 - 説明
   - NUM2が同じリーフノードが固まって配置されるとは限らないので、このインデックスを使って絞り込みは行えない
@@ -523,7 +530,9 @@ graph TB;
 |ref|(index_name)|50.00|Using where|
 
 - filtered(求める)
-- Using where(調べる)
+- Extra: Using where
+  - indexに含まれない列に対してWHEREに指定した条件を評価する
+  - 行データを取り出した後のフィルター
 
 ### 関数インデックス(今回はスキップ)
 mysql8.0.13以降は使える[参考](https://dev.mysql.com/doc/refman/8.0/en/create-index.html)
@@ -982,8 +991,8 @@ graph TB;
   - indexにASC, DESCを指定できる
 
 ## カバリングインデックス(*)
-- selectする列と使うインデックスの列が一致
-- count
+- selectで指定するカラムと使われるインデックスのカラムが一致すると、クラスタインデックスを辿らなくて済む
+- count, 
 
 ## update, delete, insert(*)
 - update, deleteのターゲットの絞り込みで使える(影響小)
