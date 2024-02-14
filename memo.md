@@ -171,9 +171,9 @@ graph TB;
 
 - 実行計画
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|const|PRIMARY|100.00|Using index|
+|type|key|Extra|
+|----|----|----|
+|const|PRIMARY|Using index|
 
 - type: const
   - 一行のみを見つけるためにBツリーを走査するときに表示される
@@ -217,9 +217,9 @@ graph TB;
 
 - 実行計画
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|const|NUM|100.00|(Using index)|
+|type|key|Extra|
+|----|----|----|
+|const|NUM|(Using index)|
 
 ##### 一意ではない(queries/not_unique_key)
   - インデックスツリーの走査とリーフノードの走査が行われる
@@ -284,9 +284,9 @@ graph TB;
 
 - 実行計画
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|ref|(index_name)|100.00|(Using index)|
+|type|key|Extra
+|----|----|----|
+|ref|(index_name)|(Using index)|
 
 - type: ref
   - リーフノードの走査している場合に表示される
@@ -369,9 +369,9 @@ graph TB;
 
 - 実行計画
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|ref|(index_name)|100.00|(Using index)|
+|type|key|Extra
+|----|----|----|
+|ref|(index_name)|(Using index)|
 
 - クエリ
 
@@ -425,9 +425,9 @@ graph TB;
 
 - 実行計画
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|ref|(index_name)|100.00|(Using index)|
+|type|key|Extra
+|----|----|----|
+|ref|(index_name)|(Using index)|
 
 - クエリ
 
@@ -480,9 +480,9 @@ graph TB;
 
 - 実行計画
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|ref|(index_name)|100.00|(Using index)|
+|type|key|Extra
+|----|----|----|
+|ref|(index_name)|(Using index)|
 
 - クエリ
 
@@ -509,9 +509,9 @@ graph TB;
 
 - 実行計画
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|index|(index_name)|10.00|Using where(, Using index)|
+|type|key|Extra|
+|----|----|----|
+|index|(index_name)|Using where(, Using index)|
 
 - type: index
   - フルインデックススキャン
@@ -596,9 +596,9 @@ graph TB;
 ```
 - 実行計画
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|ref|(index_name)|xxx|Using where|
+|type|key|Extra
+|----|----|----|
+|ref|(index_name)|Using where|
 
 - Extra: Using where
   - indexに含まれない列に対してWHEREに指定した条件を評価する
@@ -769,9 +769,9 @@ graph TB;
 
 - 実行計画(>=, <=, BETWEEN全て一緒)
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|range|(index_name)|100.00|(Using index condition)|
+|type|key|Extra
+|----|----|----|
+|range|(index_name)|(Using index condition)|
 
 - Extra: Using index condition(調べる)
 
@@ -862,9 +862,9 @@ graph TB;
 
 - 実行計画
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|range|(index_name)|100.00|Using index condition|
+|type|key|Extra
+|----|----|----|
+|range|(index_name)|Using index condition|
 
 - Extraについて
 
@@ -891,9 +891,9 @@ graph TB;
 
 - 実行計画
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|ALL|(index_name)|11.11|Using where|
+|type|key|Extra
+|----|----|----|
+|ALL|(index_name)|Using where|
 
 - 条件に当てはまるリーフノードが固まって配置されるとは限らないので、インデックスは使えない
 
@@ -992,9 +992,9 @@ graph TB;
 
 - 実行計画
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|ref|(index_name)|100.00|Using filesort|
+|type|key|Extra
+|----|----|----|
+|ref|(index_name)|Using filesort|
 
 
 - INDEX
@@ -1049,9 +1049,9 @@ graph TB;
 
 - 実行計画
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|ref|(index_name)|100.00|Using index|
+|type|key|Extra
+|----|----|----|
+|ref|(index_name)|Using index|
 
 
 ### ASC, DESC(*)?
@@ -1123,9 +1123,9 @@ graph TB;
 
 - 実行計画
 
-|type|key|filtered|Extra
-|----|----|----|----|
-|ref|(index_name)|100.00|Using index|
+|type|key|Extra
+|----|----|----|
+|ref|(index_name)|Using index|
 
 
 ## update, delete, insert(*)
