@@ -73,12 +73,12 @@ graph LR;
 - 自動的に作成される
 - 例
 
-|ID(PK)|
-|----|
-|1|
-|2|
-|3|
-|4|
+|ID(PK)|NUM1|NUM2|
+|----|----|----|
+|1|1|1|
+|2|2|2|
+|3|3|3|
+|4|4|4|
 
 ```mermaid
 graph TB;
@@ -86,8 +86,8 @@ graph TB;
     direction TB;
     a[ ]-->b[ ];
     a-->c[ ];
-    b-->d[1] & e[2];
-    c-->f[3] & g[4];
+    b-->d[PK: 1<br>NUM1: 1<br>NUM2: 1] & e[PK: 2<br>NUM1: 2<br>NUM2: 2];
+    c-->f[PK: 3<br>NUM1: 3<br>NUM2: 3] & g[PK: 4<br>NUM1: 4<br>NUM2: 4];
   end
 ```
 
