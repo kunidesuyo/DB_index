@@ -33,7 +33,14 @@ graph TB;
 - 計算量
   - 検索`log(n)`
     - ツリーの走査という
-    - (図)
+![image](https://github.com/kunidesuyo/DB_index/assets/81606310/2e785dee-d90b-4dc6-8bee-62ca994778c6)
+![image](https://github.com/kunidesuyo/DB_index/assets/81606310/13e99de1-0e0a-4582-89e0-1003b65025fe)
+![image](https://github.com/kunidesuyo/DB_index/assets/81606310/f34aeab0-6ed0-4133-9d56-21650ddb8919)
+![image](https://github.com/kunidesuyo/DB_index/assets/81606310/ec0a63b9-f1f6-48ca-abaf-fc51c3dd1240)
+![image](https://github.com/kunidesuyo/DB_index/assets/81606310/83ccb374-c1f0-407c-9880-cda9033e8bb0)
+![image](https://github.com/kunidesuyo/DB_index/assets/81606310/f674e926-5d98-48b0-8215-842fac48f263)
+
+
   - 挿入`log(n)`
   - 更新`log(n)`
   - 削除`log(n)`
