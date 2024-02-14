@@ -991,8 +991,72 @@ graph TB;
   - ASC, DESCが一致していれば良い
   - indexにASC, DESCを指定できる
 
-## カバリングインデックス(*)
+## カバリングインデックス(/queries/covering_index)
 - selectで指定するカラムと使われるインデックスのカラムが一致すると、クラスタインデックスを辿らなくて済む
+
+### 例
+- DB
+
+|ID|NUM1|NUM2|
+|----|----|----|
+|1|1|1|
+|2|2|2|
+|3|3|3|
+|4|4|4|
+
+- INDEX
+
+`INDEX NUM1, NUM2`
+
+- クエリ
+
+`SELECT NUM1, NUM2 WHERE NUM1 = 2 AND NUM2 = 2`
+
+- INDEX TREE
+  - ツリーの走査
+```mermaid
+graph TB;
+  subgraph secondary index NUM
+  direction TB;
+  a[ ];
+  b[ ];
+  c[ ];
+  a-->b;
+  a-->c;
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    d[NUM1: 1<br>NUM2: 1];
+    e[NUM1: 2<br>NUM2: 2];
+    f[NUM1: 3<br>NUM2: 3];
+    g[NUM1: 4<br>NUM2: 4];
+  end
+  end
+  style e fill:red
+```
+  - リーフノードの走査
+```mermaid
+graph TB;
+  subgraph leaf node
+    direction LR;
+    a[NUM1: 1<br>NUM2: 1];
+    b[NUM1: 2<br>NUM2: 2];
+    c[NUM1: 3<br>NUM2: 3];
+    d[NUM1: 4<br>NUM2: 4];
+    a<-->b;
+    b<-->c;
+    c<-->d;
+    style b fill:red
+  end
+```
+
+- 実行計画
+
+|type|key|filtered|Extra
+|----|----|----|----|
+|ref|(index_name)|100.00|Using index|
+
 
 ## update, delete, insert(*)
 - update, deleteのターゲットの絞り込みで使える
