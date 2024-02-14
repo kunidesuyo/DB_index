@@ -149,7 +149,7 @@ graph TB;
 
 |type|key|filtered|Extra
 |----|----|----|----|
-|const|NUM|100.00|Using index|
+|const|NUM|100.00|(Using index)|
 
 ##### 一意ではない(queries/not_unique_key)
   - インデックスツリーの走査とリーフノードの走査が行われる
@@ -216,7 +216,7 @@ graph TB;
 
 |type|key|filtered|Extra
 |----|----|----|----|
-|ref|(index_name)|100.00|Using index|
+|ref|(index_name)|100.00|(Using index)|
 
 - type: ref
   - リーフノードの走査している場合に表示される
@@ -301,7 +301,7 @@ graph TB;
 
 |type|key|filtered|Extra
 |----|----|----|----|
-|ref|(index_name)|100.00|Using index|
+|ref|(index_name)|100.00|(Using index)|
 
 - クエリ
 
@@ -357,7 +357,7 @@ graph TB;
 
 |type|key|filtered|Extra
 |----|----|----|----|
-|ref|(index_name)|100.00|Using index|
+|ref|(index_name)|100.00|(Using index)|
 
 - クエリ
 
@@ -412,7 +412,7 @@ graph TB;
 
 |type|key|filtered|Extra
 |----|----|----|----|
-|ref|(index_name)|100.00|Using index|
+|ref|(index_name)|100.00|(Using index)|
 
 - クエリ
 
@@ -441,9 +441,10 @@ graph TB;
 
 |type|key|filtered|Extra
 |----|----|----|----|
-|index|(index_name)|10.00|Using where, Using index|
+|index|(index_name)|10.00|Using where(, Using index)|
 
 - type: index
+  - フルインデックススキャン
   - インデックスの全行をインデックスの順番に沿って読む
   - あまり効率が良くない
 - Extra: Using where
@@ -527,9 +528,8 @@ graph TB;
 
 |type|key|filtered|Extra
 |----|----|----|----|
-|ref|(index_name)|50.00|Using where|
+|ref|(index_name)|xxx|Using where|
 
-- filtered(求める)
 - Extra: Using where
   - indexに含まれない列に対してWHEREに指定した条件を評価する
   - 行データを取り出した後のフィルター
