@@ -5,7 +5,10 @@
 ### BTree
 - Balanced Tree
   - 構造
-    - ルートノード、ブランチノード、リーフノード
+    - ルートノード
+    - ブランチノード
+    - リーフノード
+      - 実際の値が入っている
 ```mermaid
 graph TB;
   subgraph root node
@@ -58,17 +61,76 @@ graph LR;
   end
 ```
 - リーフノードを辿るのをリーフノードの走査という
+
+## MySQLでのインデックス
+`CREATE INDEX (INDEX NAME) ON (TABLE NAME)(COL1, COL2, ...)`
+- 指定したカラムの値でソートされて、リーフノードに格納される
+  - 複数指定の場合、左から順番に優先順位がつく
+    - COL1でソート、COL1が同じならCOL2でソート、COL2が同じなら...
 ### クラスタインデックスとセカンダリインデックス
 #### クラスタインデックス
 - 主キーに作られるインデックス
 - 自動的に作成される
+- 例
+
+|ID(PK)|
+|----|
+|1|
+|2|
+|3|
+|4|
+
+```mermaid
+graph TB;
+  subgraph cluster index
+    direction TB;
+    a[ ]-->b[ ];
+    a-->c[ ];
+    b-->d[1] & e[2];
+    c-->f[3] & g[4];
+  end
+```
 
 #### セカンダリインデックス
 - ユーザーが定義するインデックス
-- リーフノードが定義に指定したカラムの値に対して順番に並ぶ
-  - 例示(図)
 - リーフノードには設定したカラムの値とPKの値が入っている
 - 実データにアクセスするときはPKの値を使ってクラスタインデックスを探索する
+- 例
+
+|ID(PK)|NUM1|NUM2|NUM3|
+|----|----|----|----|
+|1|1|1|1|
+|2|1|2|1|
+|3|1|2|2|
+|4|2|1|1|
+|5|3|2|1|
+
+`INDEX (NUM1, NUM2, NUM3)`
+
+```mermaid
+graph TB;
+  subgraph secondary index tree
+  direction TB;
+  a[ ];
+  b[ ];
+  c[ ];
+  z[ ];
+  a-->b;
+  a-->c;
+  a-->z;
+  z-->h;
+  b-->d & e;
+  c-->f & g;
+  subgraph leaf node
+    direction LR;
+    h[NUM1: 1<br>NUM2: 1<br>NUM3: 1<br> PK: 1];
+    d[NUM1: 1<br>NUM2: 2<br>NUM3: 1<br> PK: 2];
+    e[NUM1: 1<br>NUM2: 2<br>NUM3: 2<br> PK: 3];
+    f[NUM1: 2<br>NUM2: 1<br>NUM3: 1<br> PK: 4];
+    g[NUM1: 3<br>NUM2: 2<br>NUM3: 1<br> PK: 5];
+  end
+  end
+```
 
 ## WHERE句
 ### 等価演算子
@@ -121,7 +183,7 @@ graph TB;
 ###### 例
 - DB
 
-|ID(PK)|NUM|COL|
+|ID(PK)|NUM(UNIQUE)|COL|
 |----|----|----|
 |1|1|1|
 |2|2|1|
