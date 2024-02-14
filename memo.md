@@ -114,12 +114,12 @@ graph TB;
 ###### 例
 - DB
 
-|ID|NUM|
-|----|----|
-|1|1|
-|2|2|
-|3|3|
-|4|4|
+|ID|NUM|COL|
+|----|----|----|
+|1|1|1|
+|2|2|1|
+|3|3|1|
+|4|4|1|
 
 - INDEX定義
 
@@ -157,12 +157,12 @@ graph TB;
 ###### 例
 - DB
 
-|ID|NUM|
-|----|----|
-|1|1|
-|2|2|
-|3|2|
-|4|3|
+|ID|NUM|COL|
+|----|----|----|
+|1|1|1|
+|2|2|1|
+|3|2|1|
+|4|3|1|
 
 - INDEX
 
@@ -234,13 +234,13 @@ graph TB;
 ##### 例
 - DB
 
-|ID|NUM1|NUM2|NUM3|
-|----|----|----|----|
-|1|1|1|1|
-|2|1|2|1|
-|3|1|2|2|
-|4|2|1|1|
-|5|3|2|1|
+|ID|NUM1|NUM2|NUM3|COL|
+|----|----|----|----|----|
+|1|1|1|1|1|
+|2|1|2|1|1|
+|3|1|2|2|1|
+|4|2|1|1|1|
+|5|3|2|1|1|
 
 - INDEX
 
@@ -547,16 +547,17 @@ mysql8.0.13以降は使える[参考](https://dev.mysql.com/doc/refman/8.0/en/cr
 #### 大なり小なりBETWEEN(のみ)(範囲検索)(queries/range)
 - リーフノードの走査が行われる
 - {type: range}
+- TODO: NUM2を追加
 
 ##### 例
 - DB
 
-|ID|NUM|
-|----|----|
-|1|1|
-|2|2|
-|3|3|
-|4|4|
+|ID|NUM|COL|
+|----|----|----|
+|1|1|1|
+|2|2|1|
+|3|3|1|
+|4|4|1|
 
 - INDEX
 
@@ -700,7 +701,7 @@ graph TB;
 
 |type|key|filtered|Extra
 |----|----|----|----|
-|range|(index_name)|100.00|Using index condition|
+|range|(index_name)|100.00|(Using index condition)|
 
 - Extra: Using index condition(調べる)
 
@@ -734,12 +735,12 @@ graph TB;
 ##### 例
 - DB
 
-|ID|STR|
-|----|----|
-|1|AA|
-|2|AB|
-|3|BB|
-|4|CA|
+|ID|STR|COL|
+|----|----|----|
+|1|AA|1|
+|2|AB|1|
+|3|BB|1|
+|4|CA|1|
 
 - INDEX
 
@@ -793,7 +794,7 @@ graph TB;
 
 |type|key|filtered|Extra
 |----|----|----|----|
-|range|(index_name)|100.00|Using where, Using index|
+|range|(index_name)|100.00|Using index condition|
 
 - Extraについて
 
@@ -822,7 +823,7 @@ graph TB;
 
 |type|key|filtered|Extra
 |----|----|----|----|
-|index|(index_name)|11.11|Using where, Using index|
+|ALL|(index_name)|11.11|Using where|
 
 - 条件に当てはまるリーフノードが固まって配置されるとは限らないので、インデックスは使えない
 
@@ -992,7 +993,6 @@ graph TB;
 
 ## カバリングインデックス(*)
 - selectで指定するカラムと使われるインデックスのカラムが一致すると、クラスタインデックスを辿らなくて済む
-- count, 
 
 ## update, delete, insert(*)
 - update, deleteのターゲットの絞り込みで使える(影響小)
