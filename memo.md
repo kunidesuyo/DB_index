@@ -285,6 +285,8 @@ graph TB;
   end
 ```
 
+- PKを使ってクラスタインデックスから行データを取り出す
+
 - 実行計画
 
 |type|key|Extra
@@ -370,6 +372,8 @@ graph TB;
   end
 ```
 
+- PKを使ってクラスタインデックスから行データを取り出す
+
 - 実行計画
 
 |type|key|Extra
@@ -426,6 +430,8 @@ graph TB;
   end
 ```
 
+- PKを使ってクラスタインデックスから行データを取り出す
+
 - 実行計画
 
 |type|key|Extra
@@ -480,6 +486,8 @@ graph TB;
     style b fill:red
   end
 ```
+
+- PKを使ってクラスタインデックスから行データを取り出す
 
 - 実行計画
 
@@ -747,6 +755,8 @@ graph TB;
   end
 ```
 
+- PKを使ってクラスタインデックスから行データを取り出す
+
 - クエリ
 
 `(SELECT) WHERE NUM <= 3`
@@ -792,6 +802,8 @@ graph TB;
   end
 ```
 
+- PKを使ってクラスタインデックスから行データを取り出す
+
 - クエリ
 
 `(SELECT) WHERE NUM BETWEEN 2 AND 3`
@@ -835,6 +847,8 @@ graph TB;
     style c fill:red
   end
 ```
+
+- PKを使ってクラスタインデックスから行データを取り出す
 
 - 実行計画(>=, <=, BETWEEN全て一緒)
 
@@ -928,6 +942,8 @@ graph TB;
     style b fill:red
   end
 ```
+
+- PKを使ってクラスタインデックスから行データを取り出す
 
 - 実行計画
 
