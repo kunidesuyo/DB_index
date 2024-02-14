@@ -144,12 +144,12 @@ graph TB;
 
 - DB
 
-|ID(PK)|
-|----|
-|1|
-|2|
-|3|
-|4|
+|ID(PK)|NUM|
+|----|----|
+|1|1|
+|2|2|
+|3|3|
+|4|4|
 
 - query
 
@@ -173,7 +173,7 @@ graph TB;
 
 |type|key|Extra|
 |----|----|----|
-|const|PRIMARY|Using index|
+|const|PRIMARY|NULL|
 
 - type: const
   - 一行のみを見つけるためにBツリーを走査するときに表示される
