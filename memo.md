@@ -74,7 +74,7 @@ graph LR;
 
 - DB
 
-|ID|
+|ID(PK)|
 |----|
 |1|
 |2|
@@ -114,7 +114,7 @@ graph TB;
 ###### 例
 - DB
 
-|ID|NUM|COL|
+|ID(PK)|NUM|COL|
 |----|----|----|
 |1|1|1|
 |2|2|1|
@@ -157,7 +157,7 @@ graph TB;
 ###### 例
 - DB
 
-|ID|NUM|COL|
+|ID(PK)|NUM|COL|
 |----|----|----|
 |1|1|1|
 |2|2|1|
@@ -234,7 +234,7 @@ graph TB;
 ##### 例
 - DB
 
-|ID|NUM1|NUM2|NUM3|COL|
+|ID(PK)|NUM1|NUM2|NUM3|COL|
 |----|----|----|----|----|
 |1|1|1|1|1|
 |2|1|2|1|1|
@@ -463,7 +463,7 @@ graph TB;
 ##### 例
 - DB
 
-|ID|NUM1|NUM2|
+|ID(PK)|NUM1|NUM2|
 |----|----|----|
 |1|1|1|
 |2|1|2|
@@ -552,7 +552,7 @@ mysql8.0.13以降は使える[参考](https://dev.mysql.com/doc/refman/8.0/en/cr
 ##### 例
 - DB
 
-|ID|NUM|COL|
+|ID(PK)|NUM|COL|
 |----|----|----|
 |1|1|1|
 |2|2|1|
@@ -735,7 +735,7 @@ graph TB;
 ##### 例
 - DB
 
-|ID|STR|COL|
+|ID(PK)|STR|COL|
 |----|----|----|
 |1|AA|1|
 |2|AB|1|
@@ -849,7 +849,7 @@ graph TB;
 ##### 例
 - DB
 
-|ID|NUM1|NUM2|
+|ID(PK)|NUM1|NUM2|
 |----|----|----|
 |1|1|1|
 |2|2|2|
@@ -997,7 +997,7 @@ graph TB;
 ### 例
 - DB
 
-|ID|NUM1|NUM2|
+|ID(PK)|NUM1|NUM2|
 |----|----|----|
 |1|1|1|
 |2|2|2|
