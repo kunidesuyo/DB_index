@@ -219,7 +219,7 @@ graph TB;
 
 |type|key|Extra|
 |----|----|----|
-|const|NUM|(Using index)|
+|const|NUM|NULL|
 
 ##### 一意ではない(queries/not_unique_key)
   - インデックスツリーの走査とリーフノードの走査が行われる
@@ -286,7 +286,7 @@ graph TB;
 
 |type|key|Extra
 |----|----|----|
-|ref|(index_name)|(Using index)|
+|ref|(index_name)|NULL|
 
 - type: ref
   - リーフノードの走査している場合に表示される
@@ -371,7 +371,7 @@ graph TB;
 
 |type|key|Extra
 |----|----|----|
-|ref|(index_name)|(Using index)|
+|ref|(index_name)|NULL|
 
 - クエリ
 
@@ -427,7 +427,7 @@ graph TB;
 
 |type|key|Extra
 |----|----|----|
-|ref|(index_name)|(Using index)|
+|ref|(index_name)|NULL|
 
 - クエリ
 
@@ -482,7 +482,7 @@ graph TB;
 
 |type|key|Extra
 |----|----|----|
-|ref|(index_name)|(Using index)|
+|ref|(index_name)|NULL|
 
 - クエリ
 
@@ -511,7 +511,7 @@ graph TB;
 
 |type|key|Extra|
 |----|----|----|
-|index|(index_name)|Using where(, Using index)|
+|index|(index_name)|Using where|
 
 - type: index
   - フルインデックススキャン
@@ -769,7 +769,7 @@ graph TB;
 
 - 実行計画(>=, <=, BETWEEN全て一緒)
 
-|type|key|Extra
+|type|key|Extra|
 |----|----|----|
 |range|(index_name)|(Using index condition)|
 
@@ -862,7 +862,7 @@ graph TB;
 
 - 実行計画
 
-|type|key|Extra
+|type|key|Extra|
 |----|----|----|
 |range|(index_name)|Using index condition|
 
@@ -891,7 +891,7 @@ graph TB;
 
 - 実行計画
 
-|type|key|Extra
+|type|key|Extra|
 |----|----|----|
 |ALL|(index_name)|Using where|
 
