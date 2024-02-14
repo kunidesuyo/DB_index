@@ -5,6 +5,8 @@
 ## インデックスの内部構造
 ### BTree
 - Balanced Tree
+  - 木構造の計算量は木の深さ(ルートノードからリーフノードまでの距離)に依存する
+  - 各リーフノードに対する木の深さを同じに保ってくれる構造
   - 構造
     - ルートノード
     - ブランチノード
@@ -32,8 +34,6 @@ graph TB;
     g[4];
   end
 ```
-  - 木構造の計算量は木の深さ(ルートノードからリーフノードまでの距離)に依存する
-  - 各リーフノードに対する木の深さを同じに保ってくれる構造
 - 計算量
   - 検索`log(n)`
     - ツリーの走査という
@@ -64,10 +64,6 @@ graph LR;
 - リーフノードを辿るのをリーフノードの走査という
 
 ## MySQLでのインデックス
-`CREATE INDEX (INDEX NAME) ON (TABLE NAME)(COL1, COL2, ...)`
-- 指定したカラムの値でソートされて、リーフノードに格納される
-  - 複数指定の場合、左から順番に優先順位がつく
-    - COL1でソート、COL1が同じならCOL2でソート、COL2が同じなら...
 ### クラスタインデックスとセカンダリインデックス
 #### クラスタインデックス
 - 主キーに作られるインデックス
@@ -83,7 +79,7 @@ graph LR;
 
 ```mermaid
 graph TB;
-  subgraph cluster index
+  subgraph clustered index
     direction TB;
     a[ ]-->b[ ];
     a-->c[ ];
@@ -94,6 +90,10 @@ graph TB;
 
 #### セカンダリインデックス
 - ユーザーが定義するインデックス
+  - `CREATE INDEX (INDEX NAME) ON (TABLE NAME)(COL1, COL2, ...)`
+  - 指定したカラムの値でソートされて、リーフノードに格納される
+    - 複数指定の場合、左から順番に優先順位がつく
+      - COL1でソート、COL1が同じならCOL2でソート、COL2が同じなら...
 - リーフノードには設定したカラムの値とPKの値が入っている
 - 実データにアクセスするときはPKの値を使ってクラスタインデックスを探索する
 - 例
@@ -163,7 +163,7 @@ graph TB;
 
 ```mermaid
 graph TB;
-  subgraph cluster index
+  subgraph clustered index
     direction TB;
     a[ ]-->b[ ];
     a-->c[ ];
@@ -213,7 +213,7 @@ graph TB;
     a-->c[ ];
     b-->d[1] & e[NUM=2<br>ID=2];
     c-->f[3] & g[4];
-    e-->h[cluster index tree]
+    e-->h[clustered index tree]
     style e fill:red
     style h fill:red
   end
