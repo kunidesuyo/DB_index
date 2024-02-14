@@ -1,6 +1,7 @@
 # DB index
-- SQL:mysql8.0.27
-- Engine: innoDB
+- SQL: mysql 8.0.27
+- Engine: InnoDB
+- INDEX: B+Tree
 ## インデックスの内部構造
 ### BTree
 - Balanced Tree
