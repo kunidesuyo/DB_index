@@ -211,11 +211,9 @@ graph TB;
     direction TB;
     a[ ]-->b[ ];
     a-->c[ ];
-    b-->d[1] & e[NUM=2<br>ID=2];
+    b-->d[1] & e[2];
     c-->f[3] & g[4];
-    e-->h[clustered index tree]
     style e fill:red
-    style h fill:red
   end
 ```
 
